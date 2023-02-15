@@ -1,0 +1,61 @@
+
+Asynchronous JavaScript and XML
+-XML형식의 데이터 비동기 처리
+-요즘엔 json 형식 많이씀 (JavaScript Object Notation)
+  : 왜쓰냐? 문자형식의 데이터를 효율적으로 주고 받는 구조 
+  : 배열이나 객체형식으로 작성되어진 데이터
+
+{ } : 객체
+[ ] : 배열
+
+중첩 구조 :
+[ { } ]
+{ [ ] }
+
+{  //키      //밸류
+ "name" : "고등어" , "age" : 45 , "address" : "서울"
+}
+객체 접근방식 :  object.name / object["name"] 
+
+[
+ "html" , "java" , "javascript"
+]
+배열 접근방식 : object[indexNumber]
+
+{
+ "firstName" : "홍" ;
+ "lastName" : "길동" ;
+ "books" : [ "JAVA" , "HTML" , "JSP" ]
+}
+중첩 접근방식 : object.book[indexNumber]
+
+*****가장 많이쓰는 중첩구조*****
+[
+ {"city" : "서울" , "hotplace" : "홍대"},
+ {"city" : "부산" , "hotplace" : "해운대"},
+ {"city" : "제주도" , "hotplace" : "성산일출봉"}
+]
+가장 많이 쓰는 중첩 접근방식 : object[indexNumber].city / object[indexNumber]["city"]
+
+$.ajax({
+           type : 'post', //타입(get,post,put 등등)
+           url : '/test', //요청할 서버 url
+	async : true, //비동기화 여부 (default : true)
+	header : { //Http header
+		"Content-Type" : "application/json",
+		"X-HTTP-Method-Override" : "POST"
+	},
+	dataType : 'text', //데이터타입(html,xml,json,text 등등)
+	data : JSON.stringify ({ //보낼 데이터 (Object,String,Array)
+		"no" : no,
+		"name" : name,
+		"nick" : nick
+		}),
+	success : function(result) { //결과 성공 콜백함수
+		console.log(result);
+	},
+	error : function(request, status, error) { //결과 에러 콜백함수
+		console.log(error)
+	}
+})	
+  

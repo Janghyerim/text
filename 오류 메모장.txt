@@ -1,0 +1,35 @@
+Implicit super constructor Print() is undefined. Must explicitly invoke another constructor
+-생성자 오류시 super 안써서 나는 오류
+
+Exception in thread "main" java.lang.ArithmeticException: / by zero
+	at exceptionProject.ExceptionTest.main(ExceptionTest.java:10)
+-연산시 by Zero에 의해서 생기는 오류 (예외발생)
+
+Exception in thread "main" java.lang.NumberFormatException: For input string: "a50"
+-변환 과정시 바뀔 수 없는 데이터를 사용했다는 오류
+
+
+Exception in thread "main" java.util.EmptyStackException
+-값이 없어 나는 오류
+
+…or create a new repository on the command line
+echo "# wordgame" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/Janghyerim/wordgame.git
+git push -u origin main
+
+…or push an existing repository from the command line
+git remote add origin https://github.com/Janghyerim/wordgame.git
+git branch -M main
+git push -u origin main
+
+https://github.com/Janghyerim/wordgame.git
+
+오라클 오류
+ ORA-01722: 수치가 부적합합니다
+01722. 00000 -  "invalid number"
+*Cause:    The specified number was invalid.
+*Action:   Specify a valid number.

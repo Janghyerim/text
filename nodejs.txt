@@ -1,0 +1,1007 @@
+hello.js
+
+실행명령어
+
+node hello.js
+
+코딩
+console.log("hello world");
+
+터미널 출력 
+node hello.js 입력
+hello world
+============================================
+node server.js
+
+코딩
+let http = require('http');
+
+http.createServer(function(request,response){
+
+    response.writeHead(200, {'Content-Type': 'text/html'});
+    response.end('<h1>Hello world...</h1>');
+
+}).listen(52273,function(){
+
+    console.log('Server running at http://127.0.0.1:52273/')
+    
+});
+
+크롬 출력
+구글창 검색 : http://127.0.0.1:52273/
+Hello world...
+============================================
+node.js가 제공하는 전역변수
+
+_filename : 현재 실행중인 파일 경로
+
+_dirname : 현재 실행중인 폴더 경로
+
+filename : C:\work\nodejsworkspace\var.js
+dirname : C:\work\nodejsworkspace
+============================================
+console.js
+
+코딩
+console.log('숫자: %d : ', 32);
+console.log('문자열: %s ', 'hello');
+console.log('JSON: %j ', {name:'Hong'});
+
+
+터미널 출력
+숫자: 32 : 
+문자열: hello 
+JSON: {"name":"Hong"}    
+
+============================================
+exports 객체와 모듈
+exports 객체 : B파일의 기능을 A외부파일의 기능으로 쓸수 있도록 하는 모듈 
+
+파일 생성
+main.js(A외부파일)
+
+module.js(B파일)
+
+코딩
+var module = require('./module.js'); //require() = import
+
+console.log(module.abs(-234));
+console.log(module.circleArea(3));
+
+
+터미널 출력
+234
+9.42477796076938
+============================================
+node.js api
+https://nodejs.org/docs/latest-v16.x/api/
+
+내장 모듈
+
+종류
+- url
+- Query String
+- crypto
+- FileSystem
+============================================
+url.js
+
+코딩
+var url = require('url');
+            //내장모듈명
+//url문자열을 URL객체로 변환해서 리턴한다.
+var parsedObject = url.parse('http://www.hanbit.co.kr/store/books/look.php?p_code= B4250257160');
+console.log(parsedObject);
+
+
+터미널 출력
+Url {
+  protocol: 'http:',
+  slashes: true,
+  auth: null,
+  host: 'www.hanbit.co.kr',
+  port: null,
+  hostname: 'www.hanbit.co.kr',
+  hash: null,
+  search: '?p_code=%20B4250257160',
+  query: 'p_code=%20B4250257160',
+  pathname: '/store/books/look.php',
+  path: '/store/books/look.php?p_code=%20B4250257160',
+  href: 'http://www.hanbit.co.kr/store/books/look.php?p_code=%20B4250257160'
+}
+============================================
+querystring.js
+
+코딩
+const { parse } = require('path');
+var querystring = require('querystring');
+var url = require('url');
+
+var parsedObject = url.parse('http://www.hanbit.co.kr/store/books/look.php?p_code= B4250257160');
+//쿼리문자열을 쿼리객체로 변환해 리턴
+console.log(querystring.parse(parsedObject.query));
+
+
+터미널 출력
+[Object: null prototype] { p_code: ' B4250257160' }
+============================================
+crypto.js
+
+코딩
+//암호화된 정보 만들기 (로그인 등등,,,)
+var crypto = require('crypto');
+
+// var shasum = crypto.createHash('sha256');
+// shasum.update('crypto_hash');
+// var output = shasum.digest('hex');
+
+// console.log('crypto_hash', output);
+
+var key = "아무도 알지 못하는 나만의 비밀";
+var input = 'PASSWORD';
+
+var cipher = crypto.createCipher('aes192', key);
+cipher.update(input, 'utf-8', 'base64');
+var cipheredOutput = cipher.final('base64');
+
+var decipher = crypto.createDecipher('aes192', key);
+decipher.update(cipheredOutput, 'base64', 'utf-8');
+var decipheredOutput = decipher.final('utf-8');
+
+console.log('원래 문자 : ', input);
+console.log('암호화 후 : ', cipheredOutput);
+console.log('암호화 해제 : ', decipheredOutput);
+
+
+터미널 출력
+- crypto_hash 820f329baab52f75e1e3844b61b7bfcaa4035d881c6f1fbd42dc29b024638c05
+
+- (Use `node --trace-deprecation ...` to show where the warning was created)
+
+- 원래 문자 :  PASSWORD
+  암호화 후 :  urCM+H8IeM5ZRkHdTd668Q==
+  암호화 해제 :  PASSWORD
+  (node:15428) [DEP0106] DeprecationWarning: crypto.createCipher is deprecated.
+  (Use `node --trace-deprecation ...` to show where the warning was created)
+============================================
+filesystem.js
+
+코딩
+var fs = require('fs');
+
+//fs.readFile()     : 동기 처리
+//fs.readFileSync() : 비동기 처리
+
+var text = fs.readFileSync('textfile.txt', 'utf-8');
+console.log(text);
+
+fs.readFile('textfile.txt', 'utf-8', function(error, data){
+    console.log(data);
+});
+
+//fs.writeFile()   : 비동기 처리
+//fs.writeFileSync() : 동기 처리
+
+var data = 'Hello world...!!';
+
+fs.writeFile('TextFileOtherWrite.txt', data, 'utf-8', function(error){
+    console.log('async complete');
+});
+
+fs.writeFileSync('TestFileOtherWritesync.txt', data, 'utf-8');
+console.log('sync complete');
+
+textfile.txt
+문서 등록
+This is a textfile.txt
+
+
+터미널 출력
+-This is a textfile.txt
+
+-This is a textfile.txt
+
+-This is a textfile.txt
+ sync complete
+ This is a textfile.txt
+ async complete
+============================================
+node.js 이벤트
+
+- on()
+- emit()
+- EventEmitter객체
+============================================
+event.js(on())
+
+코딩
+process.on('exit', function(code){
+    console.log('안녕히 가라..');
+});
+
+process.on('uncaughtException', function(){
+    console.log('예외가 발생했군...');
+});
+
+var count = 0;
+var test = function(){  
+    count = count + 1;
+    if(count > 3){
+        return;
+    }
+    setTimeout(test, 2000);  //자기자신을 호출하는 재귀호출
+    error.error.error();
+};
+
+setTimeout(test, 2000);  //최초의 한번 호출되나 위에서 또 호출 되면서 계속 무한반복 한다. if문에서 3보다 큰 시점이 오면 종료된다.
+
+터미널 출력
+예외가 발생했군...
+예외가 발생했군...
+예외가 발생했군...
+안녕히 가라..
+============================================
+eventremove.js(on())
+
+코딩
+//재귀구조 - 무한반복
+
+var onUncaughtException = function(error){
+    console.log('예외가 발생했군...이번 한번만 봐준다.');
+
+    //한번만 실행되고 두번째부터 강제종료 하는 구문
+    //이게 없다면 무한반복 됌.
+    process.removeListener('uncaughtException', onUncaughtException);
+};
+
+process.on('uncaughtException', onUncaughtException);
+
+var test = function(){
+    setTimeout(test, 2000);
+    error.error.error();
+};
+
+setTimeout(test, 2000);
+
+
+터미널 출력
+예외가 발생했군...이번 한번만 봐준다.
+C:\work\nodejsworkspace\eventremove.js:14
+    error.error.error();
+    ^
+
+ReferenceError: error is not defined
+    at Timeout.test [as _onTimeout] (C:\work\nodejsworkspace\eventremove.js:14:5)
+    at listOnTimeout (node:internal/timers:564:17)
+    at process.processTimers (node:internal/timers:507:7)
+
+============================================
+emit.js
+
+코딩
+//(code) : 이벤트의 종류를 넘겨주는 익명함수
+process.on('exit', function(code){ 
+    console.log('안녕히 가세요!!');
+});
+
+process.exit();  //실제 프로그램 종료 (한번만 출력되고 끝남)
+
+process.emit('exit');
+process.emit('exit');
+process.emit('exit');
+process.emit('exit');
+
+console.log('프로그램 종료'); 
+
+터미널 출력
+안녕히 가세요!!
+안녕히 가세요!!
+안녕히 가세요!!
+안녕히 가세요!!
+프로그램 종료
+안녕히 가세요!!  //강제 이벤트 발생이 아닌 종료되는 프로세스안의 스레드중 멀티스레드이다.
+============================================
+eventEmit.js
+
+코딩
+const EventEmitter = require('events');
+var custom = new EventEmitter();
+
+custom.on('tick', function(code){
+    console.log('tick이벤트 실행되어짐...');
+});
+
+custom.emit('tick');
+
+터미널 출력
+tick이벤트 실행되어짐...
+============================================
+rint.js
+
+const EventEmitter = require('events');
+exports.timer = new EventEmitter();
+
+setInterval(function(){
+    exports.timer.emit('tick');
+}, 1000);
+
+app.js
+
+var rint = require('./rint');
+
+rint.timer.on('tick', function(code){
+    console.log('tick 이벤트 실행되어짐.');
+});
+
+터미널 출력
+tick 이벤트 실행되어짐. //무한반복
+============================================
+http모듈
+웹서버의 구성을 위해 사용한다.
+
+종류
+- server 객체
+- response 객체
+- request 객체
+
+http모듈 / FileSystem모듈
+============================================
+httpserver.js
+
+코딩
+// var http = require('http');   //모듈추가
+
+// var server = http.createServer();  //서버만들기
+
+// server.listen(55555); //포트번호 구성
+
+// var server = require('http').createServer(); //서버 구성
+
+// server.listen(55555, function(){  //주소 요청
+//     console.log('Server running at http://127.0.0.1:52273/');
+// });
+
+// server.close();  //서버 종료
+
+//------------------------------------------------------------------
+//http를 구성하는 기본코드
+require('http').createServer(function(request, response){
+    response.writeHead(200, {'Content-Type':'text/html'});
+    response.end('<h1>Hello world with node js</h1>');
+}).listen(52273, function(){
+    console.log('Server running at http://127.0.0.1:52273/');
+});
+
+크롬 출력
+Hello world with node js
+============================================
+httpfs.js
+
+코딩
+var fs = require('fs');
+var http = require('http');
+
+http.createServer(function(request, response){
+    fs.readFile('HTMLPage.html', function(error, data){
+        response.writeHead(200,{'Content-Type' : 'text/html'});
+        response.end(data);
+    });
+}).listen(52273, function(){
+    console.log('Server running at http://127.0.0.1:52273/');
+});
+
+크롬 출력
+ <h1>Hello World</h1>
+    <hr/>
+    <p>Node.js</p>
+============================================
+httpimage.js
+
+코딩
+var fs = require('fs');
+var http = require('http');
+
+http.createServer(function(request, response){
+    fs.readFile('25.png', function(error,data){
+        response.writeHead(200,{'Content-Type' : 'image/png'});
+        response.end(data); 
+    });
+}).listen(52273, function(){
+    console.log('Server running at http://127.0.0.1:52273/');
+});
+
+크롬 출력
+이미지 출력 완성
+============================================
+cookie.js
+
+코딩
+//cookie : 웹브라우저에 저장할 수 있는 정보
+
+var http = require('http');
+
+http.createServer(function(request,response){
+
+    var date = new Date();
+    date.setDate(date.getDate() + 7);
+
+    response.writeHead(200,{
+        'Content-Type':'text/html',
+        'Set-Cookie': [
+            'breackfast = toast;Expries = ' + date.toUTCString(),    //쿠키 적용 7일
+            'dinner = chicken'
+        ]
+    });
+
+    response.end('<h1>' + request.headers.cookie  +'</h1>');
+}).listen(52273,function(){
+        console.log('Server running at http://127.0.0.01:52273/');
+});
+
+출력
+undefined
+
+============================================
+location.js
+
+var http = require('http');
+
+http.createServer(function(request, response){
+    response.writeHead(302,{'Location':'http://www.naver.com'})
+    response.end();
+}).listen(52273, function(){
+    console.log('Server running at http://127.0.0.1:52273/');
+});
+
+출력
+네이버
+
+============================================
+request 객체
+
+속성
+- method
+- url
+- headers
+
+http://127.0.0.1:52273/
+============================================
+request.js
+
+코딩
+var http = require('http');
+var fs = require('fs');
+var url = require('url');
+
+http.createServer(function(request, response){
+    var pathname = url.parse(request.url).pathname
+
+    if(pathname == '/'){
+        fs.readFile('index.html', function(error,data){
+            response.writeHead(200,{'Content-Type' : 'text/html'});
+            response.end(data); 
+        });
+    }else if(pathname == '/OtherPage'){
+        fs.readFile('OtherPage.html', function(error,data){
+            response.writeHead(200,{'Content-Type' : 'text/html'});
+            response.end(data); 
+        });
+    }
+}).listen(52273, function(){
+    console.log('Server running at http://127.0.0.1:52273/');
+});
+
+출력
+http://127.0.0.1:52273/
+    <h1>Hello Node.js_Index</h1>
+    <h2>Author. RintIanTta</h2>
+    <hr/>
+    <p>Lorem ipsum dolar sit amet</p>
+
+http://127.0.0.1:52273/OtherPage
+    <h1>Hello Node.js_OtherPage</h1>
+    <h2>Author. RintIanTta</h2>
+    <hr/>
+    <p>Lorem ipsum dolar sit amet</p>
+============================================
+method.js
+
+코딩
+var http = require('http');
+
+http.createServer(function(request, response){
+   if(request.method == 'GET'){
+        console.log('GET방식의 요청입니다.');
+   }else if(request.method == 'POST'){
+        console.log('POST방식의 요청입니다.');
+   }
+}).listen(52273, function(){
+    console.log('Server running at http://127.0.0.1:52273/');
+});
+
+터미널 출력
+GET방식의 요청입니다.
+============================================
+
+http모듈을 이용한 웹서버 구성하기
+
+var http = require('http');
+http.createServer(function(req,res){
+	
+}).listen(52273,function(){
+
+});
+
+============================================
+
+요청매개변수(파라미터)추출하기
+http://127.0.0.1:52273?name=hong&region=seoul
+
+
+Map함수 (반복한다는 개념)
+forEach , map
+
+============================================
+외부모듈
+npm(Node Package Manager)
+
+npm install 모듈명
+
+ejs
+jade
+supervior
+npm install 모듈설치명령어
+npm init    node.js프로젝트 생성
+
+ejspage.ejs - ejs확장자
+
+npm install --save 모듈
+npm init 
+
+npm install --save jade
+npm install --save ejs@1
+
+http모듈 / express모듈 (미들웨어)
+============================================
+
+express모듈 응답을 위한 메소드
+
+response.send()  // HTML 또는 데이터 형식에 맞추어 처리
+response.json()   // json
+response.redirect()  // 페이지 이동
+
+responsesend.js
+
+============================================
+
+express모듈 요청을 처리하는 속성과 메소드
+
+params
+query
+headers
+header()
+
+requestParam.js
+
+주소값
+http://127.0.0.1:52273?name=hong&region=seoul
+
+코딩
+//03. express 모듈 (웹서버 구성)
+
+var express = require('express');
+
+// 서버 생성
+var app = express();
+
+// use-> 기본 미들웨어. http://127.0.0.1:52273/ 라는 요청이 들어오면 use가 받아서 실행.
+app.use(function(request, response){
+    var name = request.query.name;
+    var region = request.query.region;
+
+    response.send('<h1>' + name + '-' + region + '</h1>')
+});
+
+// 서버 실행
+app.listen(52273, function(){
+    console.log("Server Running at http://127.0.0.1:52273/");
+});
+
+
+출력
+hong-seoul
+============================================
+use()
+-여러번 사용할 수 있다.
+
+use.js
+코딩
+var express = require('express');
+
+// 서버 생성
+var app = express();
+
+// use-> 기본 미들웨어. http://127.0.0.1:52273/ 라는 요청이 들어오면 use가 받아서 실행.
+app.use(function(request, response,next){
+    console.log("첫번째 미들웨어");
+    next(); //다음 위치에 use()정의한 함수를 호출 한다.
+});
+
+app.use(function(request, response,next){
+    console.log("두번째 미들웨어");
+    next(); //다음 위치에 use()정의한 함수를 호출 한다.
+});
+
+app.use(function(request, response,next){
+    console.log("세번째 미들웨어");
+    
+    response.writeHead(200,{'Content-Type':'text/html'});
+    response.end('<h1>Hello Basic</h1>');
+});
+
+
+// 서버 실행
+app.listen(52273, function(){
+    console.log("Server Running at http://127.0.0.1:52273/");
+});
+
+출력 
+웹브라우저 - Hello Basic
+터미널
+첫번째 미들웨어
+두번째 미들웨어
+세번째 미들웨어
+첫번째 미들웨어
+두번째 미들웨어
+세번째 미들웨어
+
+---------------------------------------------------------------------------
+use2.js
+코딩
+var express = require('express');
+
+// 서버 생성
+var app = express();
+
+// use-> 기본 미들웨어. http://127.0.0.1:52273/ 라는 요청이 들어오면 use가 받아서 실행.
+app.use(function(request, response,next){
+    request.number = 52;
+    response.number = 256;
+    next();
+});
+
+app.use(function(request, response,next){
+    response.send('<h1>' + request.number + " : " + response.number + '</h1>')    
+});
+
+// 서버 실행
+app.listen(52273, function(){
+    console.log("Server Running at http://127.0.0.1:52273/");
+});
+
+출력
+52 : 256
+============================================
+라우터 미들웨어(내장 모듈)
+-길라잡이(안내해주는 역할 - 요청에 맞게 처리 하도록 해당 데이터를 분배해주는 역할)
+ 
+get()
+post()
+put()
+delete()
+
+router.js
+
+코딩
+var express = require('express');
+
+// 서버 생성
+var app = express();
+
+//      URI값
+app.get('/a',function(request, response){
+    response.send('<a href="/b">Go to B</a>');
+
+});
+
+app.get('/b',function(request,response){
+    response.send('<a href="/a">Go to A</a>');
+
+});
+
+// 서버 실행
+app.listen(52273, function(){
+    console.log("Server Running at http://127.0.0.1:52273/");
+});
+
+출력
+http://127.0.0.1:52273/b
+Go to A
+http://127.0.0.1:52273/a
+Go to B
+---------------------------------------------------------------------------
+주소 값 
+query : http://localhose:52273?name=hong
+params : http://localhose:52273/page/100
+
+router.js
+
+코딩
+var express = require('express');
+
+// 서버 생성
+var app = express();
+
+//          URI값
+app.get('/page/:id',function(request,response){
+    var page = request.params.id;
+    response.send('<h1>' + page + ' Page </h1>')
+});
+
+// 서버 실행
+app.listen(52273, function(){
+    console.log("Server Running at http://127.0.0.1:52273/");
+});
+
+출력
+params : http://localhose:52273/page/100
+100Page
+---------------------------------------------------------------------------
+app.js
+
+코딩
+var express = require('express');
+
+// 서버 생성
+var app = express();
+
+//라우터 생성(라우터 분리생성)
+var routerA = express.Router();
+var routerB = express.Router();
+
+routerA.get('/index',function(request,response){
+    response.send('<h1>routerA index Page</h1>');
+});
+
+routerB.get('/index',function(request,response){
+    response.send('<h1>routerB index Page</h1>');
+});
+
+app.use('/a',routerA);
+app.use('/b',routerB);
+
+// 서버 실행
+app.listen(52273, function(){
+    console.log("Server Running at http://127.0.0.1:52273/");
+});
+    
+출력
+// 주소를 두번 체크 해야 함.
+http://localhose:52273/a/index 
+http://localhose:52273/b/index 
+
+routerA index Page
+routerB index Page
+---------------------------------------------------------------------------
+app2.js
+
+코딩
+var express = require('express');
+var routera = require('./routerA');
+
+// 서버 생성
+var app = express();
+
+app.use('/a',routera.router);
+
+// 서버 실행
+app.listen(52273, function(){
+    console.log("Server Running at http://127.0.0.1:52273/");
+});
+
+출력
+http://localhose:52273/a/index 
+분리된 routerA index Page    
+
+routerA.js
+
+코딩
+var express = require('express');
+
+//라우터 객체생성(라우터 분리생성)
+var router = express.Router();
+
+//미들웨어 구성
+router.get('/index',function(request,response){
+    response.send('<h1>분리된 routerA index Page</h1>');
+});
+
+exports.router = router;
+---------------------------------------------------------------------------
+심화ver.
+app2.js
+
+코딩
+var express = require('express');
+//var routera = require('./routerA');
+var loginb = require('./loginRouter');
+
+// 서버 생성
+var app = express();
+
+//app.use('/a',routera.router);
+app.use('/b',loginb.router);
+
+
+// 서버 실행
+app.listen(52273, function(){
+    console.log("Server Running at http://127.0.0.1:52273/");
+});
+
+출력
+http://localhose:52273/b/index 
+로그인을 요청하는 페이지
+
+loginRouter.js
+
+코딩
+var express = require('express');
+
+var router = express.Router();
+
+router.get('/index',function(request,response){
+    response.send('<h1>로그인을 요청하는 페이지</h1>')
+});
+
+exports.router = router;
+---------------------------------------------------------------------------
+static 미들웨어
+
+자원이 저장된 위치를 설정하는 역할
+css, js, 이미지 파일
+
+public폴더 생성
+
+---------------------------------------------------------------------------
+static.js
+*public폴더에 sea2.jpg있음.
+코딩
+var express = require('express');
+
+// 서버 생성
+var app = express();
+
+// 미들웨어 구성
+app.use(express.static(__dirname + '/public'));
+
+app.use(function(request,response){
+    response.writeHead(200,{'Content-Type':'text/html'});
+    response.end('<img src = "/sea2.jpg" width=100% />')
+});
+
+// 서버 실행
+app.listen(52273, function(){
+    console.log("Server Running at http://127.0.0.1:52273/");
+});
+    
+
+출력 
+sea2.jpg
+
+---------------------------------------------------------------------------
+cookie parser 미들웨어
+
+request와 response객체에 각각 cookie속성과 cookie()메소드가 부여된다.
+
+npm install cookie-parser 설치
+
+cookieparse.js
+
+코딩
+var express = require('express');
+var cookieParser = require('cookie-parser');
+
+// 서버 생성
+var app = express();
+
+// 미들웨어 구성
+app.use(cookieParser());
+
+app.get('/getCookie',function(request,response){
+    response.send(request.cookies);
+});
+app.get('/setCookie',function(request,response){
+    response.cookie('string','cookie');
+    response.cookie('json',{name:'cookie',property:'delicious'});
+
+    response.redirect('/getCookie');
+});
+
+// 서버 실행
+app.listen(52273, function(){
+    console.log("Server Running at http://127.0.0.1:52273/");
+});    
+
+출력
+http://127.0.0.1:52273/setCookie -> http://127.0.0.1:52273/getCookie 로 페이지 이동됨.
+('string','cookie');
+('json',{name:'cookie',property:'delicious'});
+
+
+
+============================================
+GET       특정정보를 조회    /user/:id
+POST      정보를 추가         /user
+PUT       정보를 수정          /user/:id
+DELETE   정보를 삭제          /user/:id
+
+
+
+============================================
+mysql 모듈 사용하기
+
+npm install mysql   
+
+update, delete가 되지 않을때 -> safe mode 해제
+해제문
+SET SQL_SAFE_UPDATES = 0;
+
+
+
+============================================
+https://socket.io/
+노드js 에서는 소켓을 어떤식으로 사용 하는지...
+
+웹소켓의 통신방식 (클라이언트와 서버가 주고받는 방식)
+
+1. public      : 자신을 포함한 모든 클라이언트에 데이터 전달
+2. broadcast  : 자신을 제외한 모든 클라이언트에 데이터 전달
+3. private     : 특정 클라이언트에 데이터 전달
+
+npm install socket.io@1
+
+socket.js
+
+socketpage.html
+
+socket.io 모듈
+
+connection : 클라이언트가 연결 요청 시 동작하는 이벤트
+disconnect : 클라이언트가 접속을 해제 시 동작하는 이벤트
+
+
+on() : 이벤트를 받을 때
+emit() : 이벤트를 강제 발생해서 보낼 때
+
+socket.join() : 클라이언트를 방에 참여
+io.sockets.in() / io.sockets.to() : 특정방에 있는 클라이언트를 추출
+
+방 생성
+socketroom.js
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,4 @@
+Springboot
+
+@Configuration : @Bean으로 사용 될 메소드이다.
+@Bean  --둘이 같이 사용됨.

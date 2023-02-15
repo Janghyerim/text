@@ -1,0 +1,63 @@
+cd ..
+SQL Git Bash 이용하여 파일 올리는 법
+
+…or create a new repository on the command line
+echo "# oracle" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M maingit
+git remote add origin https://github.com/Janghyerim/oracle.git
+git push -u origin main
+============================================
+
+…or push an existing repository from the command line
+git remote add origin https://github.com/Janghyerim/oracle.git
+git branch -M main
+git push -u origin main
+
+cd ..
+cd oracleworkspace
+ls
+git init
+git config --global user.name
+git config --global user.email
+git status(빨간색)
+
+git add . (전체파일 업로드)
+git add '.sql' (특정파일 업로드)
+
+git status(초록색)
+git commit -m "first" 메세지 만들어서 같이 올릴수 있게 준비 해주는 작업
+git remote add origin https://github.com/Janghyerim/oracle.git 주소 넣어주기
+git remote -v 연결 되었는지 확인
+git push origin master 최종 깃허브에 올리는 작업
+git remote rm origin 원격 연결 끊는 방법 종료
+===========================================
+처음 깃 연동 할 때 (스프링)
+$ cd /c/work/springworkspace -연결할 경로
+git init
+git remote add origin https://github.com/Janghyerim/STS.git
+git remote -v 연결 되었는지 확인
+git add . (전체파일 업로드)
+git add 'ex00' (특정파일 업로드)
+git commit -m "first" 메세지 만들어서 같이 올릴수 있게 준비 해주는 작업
+git push origin master 최종 깃허브에 올리는 작업
+===========================================
+깃 연결 후 파일 업로드 시 
+cd ..
+cd ..
+ls
+cd work
+cd springworkspace
+git status
+파일 확인 후..
+git add '파일 이름'
+git commit -m "메세지"
+git push origin master
+===========================================
+내 파일이랑 레파지토리랑 끊기는 문구-
+git remote rm origin 원격 연결 끊는 방법 종료
+===========================================
+
+

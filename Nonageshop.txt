@@ -1,0 +1,23 @@
+--쇼핑몰 만들기--
+파일 코딩 순
+index.jsp
+NonageServlet.java
+ActionFactory.java
+IndexAction.java
+ProductDAO.java
+
+DB연결하기 위해 사용되는 파일(변동X)
+DBManager.java
+ProductVO.java
+
+
+홈페이지 링크
+http://localhost:8081/NonageShop/NonageServlet?command=index
+상세보기
+http://localhost:8081/NonageShop/NonageServlet?command=product_detail&pseq=
+카테고리
+http://localhost:8081/NonageShop/NonageServlet?command=catagory&kind=
+약관
+http://localhost:8081/NonageShop/NonageServlet?command=contract
+약관동의 폼
+http://localhost:8081/NonageShop/NonageServlet?command=join_form

@@ -1,0 +1,174 @@
+submit 이벤트를 처리 할때 쓰는 방식
+
+1.<input type="submit">
+
+2.<form onsubmit="return check()">
+
+3. <script> 
+	document.getElementById('frm').submit();
+  </script>
+
+--------------------------------------------------------------------
+./ : 현재위치에서 찾기
+../ : 하나 상위 위치에서 찾기 (상대경로에서 쓰는 방식)
+
+--------------------------------------------------------------------
+session - 서버에서 관리하는 데이터
+-로그인, 비회원 구매....
+
+cookie - 클라이언트에서 관리하는 데이터
+-서버로부터 전송받은 개인별 정보를 관리 (해당pc에 한정)
+
+--------------------------------------------------------------------
+-액션태그 : 기존의 스크립틀릿 표현을 단순하게 한다.
+<jsp:include>
+<jsp:forward>
+<jsp:useBean>
+
+<%
+	MemberDAO  dao = new MemberDAO( );
+	//dao.getMemberDao( );
+	dao.getId( );
+	dao.setId("hong");
+%>  
+//을 useBean을 사용하여 간단하게 만들 수 있다.
+
+-빈클래스를 생성하기 위해
+-getter / setter
+<jsp:useBean id="변수이름" class="사용할 패키지와 클래스명" scope="저장될 영역">
+<jsp:useBean id="dao" class="MemberDAO" scope="영역객체">
+<jsp:setProperty name="dao" property="id" value="hong">  //dao.setId("hong");
+<jsp:getProperty name="dao" property="id">                   //dao.getId( );
+
+--------------------------------------------------------------------
+-빈태그의 사용 목적
+-입력 폼의 값을 전송받아서 저장하는 용도
+
+select *
+from emp
+where ename like '%k';  // % , _
+
+<? extends Person>
+
+--------------------------------------------------------------------
+루트
+http://localhost:8081/
+
+루트뒤에 어떤 파일이 오던 utf-8방식으로 한글이 안깨짐 (web-xml 수정 후)
+http://localhost:8081/ActionTagProject/UseBeanAction.jsp
+
+--------------------------------------------------------------------
+<form method="get">  //action속성이 생략된 경우는 현재 url표시된 주소가 action속성이 된다.
+
+http://localhost:8081/BoardModel1/List.jsp?searchField=content&searchWord=
+
+--------------------------------------------------------------------
+게시판 페이징 기능 넣기
+
+한 페이지당 게시물 갯수 : 10
+한 블럭당 페이지 번호 : 5
+전체글의 갯수 : 123
+
+[1 2 3 4 5] =>한 블럭
+[6 7 8 9 10]
+[11 12 13]
+
+게시물의 시작 번호 : (현재 페이지 번호 - 1) * 한 페이지당 게시물 갯수 +1 =>1, 11
+게시물의 끝 번호 : (현재 페이지 번호 * 한 페이지당 게시물 갯수)           =>10, 20
+
+전체 페이지 갯수 : Math.ceil(전체 게시물의 갯수 / 한 페이지당 게시물 갯수) =>12.3 =>13
+
+이전페이지 블럭가기 : ((현재 페이지 번호 - 1) / 한 블럭당 페이지번호 갯수) * 한 블럭당 페이지번호 갯수 + 1
+
+각 페이지의 번호 : 이전페이지 블럭가기에서 구한 블럭의 페이지 시작번호를 5번 반복하면서 1씩 증가
+
+다음페이지 바로가기 : 현재 블럭의 마지막 페이지 번호에 +1한다
+
+--------------------------------------------------------------------
+10강 EL
+
+표현식 
+<%=값 %>
+
+표현언어(EL) : 자바코드의 사용을 줄이기 위해 사용한다.
+${값}
+1. JSTL연계해서 사용한다.
+
+2. 파라미터값 받기
+<%= request.getParameter("속성값") %>
+${ param.속성값 }
+${ param["속성값"] }
+
+2. 영역객체의 속성을 가지고 와서 출력 
+${ pageScope.속성값 }
+${ requestScope.속성값 }
+${ sessionScope.속성값 }
+${ applicationScope.속성값 }
+
+${속성값} page -> request -> session -> application
+
+--------------------------------------------------------------------
+11강 JSTL (JSP Standard Tag Library)
+
+3대 지시자
+<%@ page
+        include
+        taglib  --사용
+
+구글 maven repository 접속
+자르 파일 배포 받을 수 있는 라이브러리 사이트
+JSTL » 1.2버전 다운
+
+--------------------------------------------------------------------
+13강 서블릿(Servlet)
+일반적으로 명시되어있지 않아 보안에 뛰어나다.
+
+http://localhost:8081/ServletProject/HelloServlet
+-주소 형식이면 get 방식
+/HelloServlet : 클래스파일명
+
+
+@WebServlet애너테이션으로 매핑
+
+http://localhost:8081/ServletProject/AnnoMapping.jsp
+애너테이션 매핑 후 .jsp ->.do로 바뀜
+http://localhost:8081/ServletProject/AnnoMapping.do
+
+
+1.Url 입력
+2.Servlet에서 역할 구현 
+3.메시지 입력
+request.setAttribute("message", "HelloServlet");
+4.클라이언트 "HelloServlet.jsp"에게 전송
+request.getRequestDispatcher("HelloServlet.jsp").forward(request, response); 
+
+
+
+MVC패턴을 적용한 회원인증 구현
+
+서블릿 파일 수정 시
+@WebServlet(urlPatterns = {"/MemberAuth.mvc"},
+initParams = {@WebInitParam(name="admin_id", value="nakja")})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
